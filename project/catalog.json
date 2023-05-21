@@ -1,0 +1,78 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Ноутбуки",
+      "description": "Категория ноутбуков"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Планшеты",
+      "description": "Категория планшетов"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Смартфоны",
+      "description": "Категория смартфонов"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name": "Ноутбук Lenovo",
+      "description": "Ноутбук Lenovo с процессором Intel Core i5, оперативной памятью 8 ГБ и жестким диском 256 ГБ",
+      "price": 59990
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "name": "Ноутбук Asus",
+      "description": "Ноутбук Asus с процессором Intel Core i7, оперативной памятью 16 ГБ и жестким диском 512 ГБ",
+      "price": 79990
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "category": 2,
+      "name": "Планшет Samsung",
+      "description": "Планшет Samsung с экраном 10 дюймов, оперативной памятью 4 ГБ и встроенной памятью 64 ГБ",
+      "price": 19990
+    }
+  },
+  {
+   
+
+"model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "category": 2,
+      "name": "Планшет Apple",
+      "description": "Планшет Apple с экраном 11 дюймов, оперативной памятью 6 ГБ и встроенной памятью 128 ГБ",
+      "price": 49990
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "category": 3,
+      "name": "Смартфон Xiaomi",
+      "description": "Смартфон Xiaomi с экраном 6.5 дюймов, оперативной памятью 8 ГБ и встроенной памятью 128 ГБ",
+      "price": 14990
+    }
+  },
+]
