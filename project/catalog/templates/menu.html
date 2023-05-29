@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home' %}">Catalog</a> <!-- добавляем ссылку на главную страницу -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <!-- Добавляем ссылки на другие страницы приложения, если они есть -->
+        <!-- Например, ссылка на страницу с категориями товаров -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
+        </li>
+      </ul>
+    </div>
+  </nav>

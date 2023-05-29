@@ -1,6 +1,6 @@
 [
   {
-    "model": "catalog.category",
+    "model": "catalog_category",
     "pk": 1,
     "fields": {
       "name": "Ноутбуки",
@@ -8,7 +8,7 @@
     }
   },
   {
-    "model": "catalog.category",
+    "model": "catalog_category",
     "pk": 2,
     "fields": {
       "name": "Планшеты",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "model": "catalog.category",
+    "model": "catalog_category",
     "pk": 3,
     "fields": {
       "name": "Смартфоны",
@@ -24,7 +24,7 @@
     }
   },
   {
-    "model": "catalog.product",
+    "model": "catalog_product",
     "pk": 1,
     "fields": {
       "category": 1,
@@ -34,7 +34,7 @@
     }
   },
   {
-    "model": "catalog.product",
+    "model": "catalog_product",
     "pk": 2,
     "fields": {
       "category": 1,
@@ -44,7 +44,7 @@
     }
   },
   {
-    "model": "catalog.product",
+    "model": "catalog_product",
     "pk": 3,
     "fields": {
       "category": 2,
@@ -54,9 +54,7 @@
     }
   },
   {
-   
-
-"model": "catalog.product",
+	"model": "catalog_product",
     "pk": 4,
     "fields": {
       "category": 2,
@@ -66,7 +64,7 @@
     }
   },
   {
-    "model": "catalog.product",
+    "model": "catalog_product",
     "pk": 5,
     "fields": {
       "category": 3,

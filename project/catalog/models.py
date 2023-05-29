@@ -6,11 +6,6 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
 
-    class Meta:
-        ordering = ['name']
-        verbose_name = 'category'
-        verbose_name_plural = 'categories'
-
     def __str__(self):
         return self.name
     
@@ -23,10 +18,9 @@ class Product( models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ['name']
-        verbose_name = 'product'
-        verbose_name_plural = 'products'
+class Meta:
+    db_table = 'catalog_product'
+    ordering = ['name']
     
     def __str__(self):
         return self.name

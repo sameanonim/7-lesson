@@ -1,0 +1,12 @@
+h1 {
+    color: blue;
+    font-family: Arial;
+  }
+  
+  p {
+    font-size: 14px;
+  }
+  
+  li {
+    list-style-type: none;
+  }
