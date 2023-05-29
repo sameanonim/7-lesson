@@ -1,0 +1,57 @@
+{% extends 'base.html' %} <!-- наследуемся от базового шаблона -->
+{% load static %}
+{% block title %}Catalog - Home{% endblock %} <!-- переопределяем блок для заголовка страницы -->
+{% block content %} <!-- переопределяем блок для основного содержимого страницы -->
+<div class="container">
+  <h1>Welcome to Catalog!</h1>
+  <p>This is a simple Django app that allows you to browse and buy products.</p>
+</div>
+{% endblock %}
+
+{ % extends 'base.html' %}
+{% load static %}
+{ % block title %}
+Главная страница
+{ % endblock %}
+{ % block extra_head %}
+<!-- Подключение файла CSS с именем style.css из папки static -->
+<link rel="stylesheet" href="{% static 'style.css' %}">
+{ % endblock %}
+{ % block content %}
+<h1>Список товаров</h1>
+<ul>
+  { % for product in products %}
+  <li>
+    <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+    <p>Название: {{product.name}}</p>
+    <p>Цена: {{product.price}} руб.</p>
+    <p>Описание: {{product.description}}</p>
+  </li>
+  { % endfor %}
+</ul>
+{ % endblock %}
+
+{% load static %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <!-- Проходимся по списку товаров в цикле -->
+    {% for product in products %}
+    <div class="col-md-4">
+      <!-- Отображаем карточку товара с изображением, названием, ценой и обрезанным описанием -->
+      <div class="card mb-4">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.price }} руб.</p>
+          <!-- Обрезаем описание после 100 символов и добавляем многоточие -->
+          <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+          <!-- Добавляем ссылку для перехода на страницу с карточкой товара -->
+          <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
