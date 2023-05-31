@@ -1,7 +1,8 @@
 from django.template import loader
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from .models import Product
+from .forms import ProductForm
 
 # Create your views here.
 
@@ -25,3 +26,13 @@ def product_detail(request, product_id):
     context = {'product': product}
     # Рендерим шаблон product.html с контекстом, содержащим объект product
     return render(request, 'product.html', context)
+
+def create_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm()
+    return render(request, 'create_products.html', {'form': form})

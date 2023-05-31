@@ -3,6 +3,8 @@ from catalog.models import Category, Product
 from django.utils import timezone
 
 class Command(BaseCommand):
+    help = 'Внесение данных в Базу Данных'
+
     def handle(self, *args, **options):
         # Delete all objects
         Category.objects.all().delete() # Delete all categories (without deleting products)
