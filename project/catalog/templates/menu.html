@@ -6,8 +6,9 @@
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <!-- Добавляем ссылки на другие страницы приложения, если они есть -->
-        <!-- Например, ссылка на страницу с категориями товаров -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'post_list' %}">Блог</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'contacts' %}">Контакты</a>
         </li>
