@@ -1,5 +1,5 @@
 from django.core.management import BaseCommand
-from catalog.models import Category, Product
+from catalog.models import Category, Product, Post
 from django.utils import timezone
 
 class Command(BaseCommand):
@@ -7,8 +7,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Delete all objects
-        Category.objects.all().delete() # Delete all categories (without deleting products)
-        Product.objects.all().delete() # Delete all products (without deleting categories)
+        Category.objects.all().delete() # Delete all categories
+        Product.objects.all().delete() # Delete all products
+        Post.objects.all().delete() # Delete all posts
 
         # Create categories
         category1 = Category.objects.create(name='Ноутбуки', description='Категория ноутбуков')
@@ -21,3 +22,7 @@ class Command(BaseCommand):
         product3 = Product.objects.create(category=category2, name='Планшет Samsung', description='Планшет Samsung с экраном 10 дюймов, оперативной памятью 4 ГБ и встроенной памятью 64 ГБ', price=19990.0, image='samsung.jpg', created=timezone.now(), updated=timezone.now())
         product4 = Product.objects.create(category=category2, name='Планшет Apple', description='Планшет Apple с экраном 11 дюймов, оперативной памятью 6 ГБ и встроенной памятью 128 ГБ', price=49990.0, image='apple.jpg', created=timezone.now(), updated=timezone.now())
         product5 = Product.objects.create(category=category3, name='Смартфон Xiaomi', description='Смартфон Xiaomi с экраном 6.5 дюймов, оперативной памятью 8 ГБ и встроенной памятью 128 ГБ', price=14990.0, image='xiaomi.jpg', created=timezone.now(), updated=timezone.now())
+
+        # Create post
+        post1 = Post.objects.create(id=2, title="Who When What Why", slug="whowhenwhywhat", content="About Walter Kronkait", preview="posts/qrcode.png", created_at="2023-06-08 21:31:49.956494+03", published=True, views=1) # Создаем объект Post с данными из задания
+        post1.save() 
