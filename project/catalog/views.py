@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy
-from django.db import models
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
+from django import forms
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
 from .models import Product, Post
-from .forms import ProductForm
+from .forms import ProductForm, VersionFormSet
 
 # Create your views here.
 
@@ -29,15 +29,61 @@ class ProductDetailView(DetailView):
     # Указываем параметр, по которому ищется объект в базе данных
     pk_url_kwarg = 'product_id'
 
-class CreateProductView(CreateView):
+
+class ProductCreateView(CreateView):
     # Указываем модель, для которой создается форма
     model = Product
     # Указываем форму, которая используется для создания объекта
     form_class = ProductForm
-    # Указываем имя шаблона для отображения формы
-    template_name = 'create_products.html'
-    # Указываем URL, на который будет перенаправлен пользователь после успешного создания объекта
-    success_url = reverse_lazy('product_list')
+    # указываем шаблон
+    template_name = 'create_product.html'
+    #у указываем адрес перенаправления
+    success_url = '/'
+
+class ProductUpdateView(UpdateView):
+    # Указываем модель, для которой создается форма
+    model = Product
+    # Указываем форму, которая используется для создания объекта
+    form_class = ProductForm
+    # указываем шаблон
+    template_name = 'update_product.html'
+    #у указываем адрес перенаправления
+    success_url = '/'
+
+        # метод для добавления дополнительного контекста в шаблон
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # если запрос типа POST, то создаем формсет из полученных данных и файлов
+        if self.request.POST:
+            context['version_formset'] = VersionFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        # иначе создаем пустой формсет
+        else:
+            context['version_formset'] = VersionFormSet(instance=self.object)
+        return context
+
+    # метод для сохранения формы и формсета в базу данных
+    def form_valid(self, form):
+        context = self.get_context_data()
+        version_formset = context['version_formset']
+        # если формсет валиден, то сохраняем его вместе с формой
+        if version_formset.is_valid():
+            self.object = form.save()
+            version_formset.instance = self.object
+            version_formset.save()
+            return super().form_valid(form)
+        # иначе возвращаем ошибку валидации
+        else:
+            return self.form_invalid(form)
+
+class ProductDeleteView(DeleteView):
+    # Указываем модель, для которой создается форма
+    model = Product
+    # Указываем форму, которая используется для создания объекта
+    form_class = ProductForm
+    # указываем шаблон
+    template_name = 'delete_product.html'
+    #у указываем адрес перенаправления
+    success_url = '/'
 
 # Контроллер для отображения списка статей
 class PostListView(ListView):

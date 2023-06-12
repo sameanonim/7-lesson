@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>Удалить продукт</h1>
+<h3>Вы уверены, что хотите удалить продукт {{ product.name }}?</h3>
+<form method="POST">
+  <!-- добавляем токен для защиты от CSRF-атак -->
+  {% csrf_token %}
+  <!-- добавляем кнопку для подтверждения удаления -->
+  <input type="submit" value="Да, удалить">
+</form>
+{% endblock %}

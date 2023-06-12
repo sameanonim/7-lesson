@@ -2,9 +2,11 @@
 {% load static %}
 {% block content %}
 <h1>Создать новый продукт</h1>
-<form method="post" enctype="multipart/form-data">
+<form method="POST">
+  <!-- добавляем токен для защиты от CSRF-атак -->
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="Подтвердить">Save</button>
+  <!-- добавляем кнопку для отправки формы -->
+  <input type="submit" value="Сохранить">
 </form>
 {% endblock %}

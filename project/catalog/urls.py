@@ -2,14 +2,16 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import HomeView, ContactsView, ProductDetailView, CreateProductView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
+from .views import HomeView, ContactsView, ProductDetailView, ProductCreateView, ProductDeleteView, ProductUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 
 urlpatterns = [
     # Use the CBV as_view() method instead of the FBV
     path('', HomeView.as_view(), name='home'),
     path('contacts/', ContactsView.as_view(), name='contacts'),
     path('product/<int:product_id>/', ProductDetailView.as_view(), name='product_detail'),
-    path('create/', CreateProductView.as_view(), name='create_product'),
+    path('create/', ProductCreateView.as_view(), name='create_product'),
+    path('update/<int:pk>/', ProductUpdateView.as_view(), name='update_product'),
+    path('delete/<int:pk>/', ProductDeleteView.as_view(), name ='delete_product'),
     path('post_list', PostListView.as_view(), name='post_list'),
     path('post/<slug:slug>/', PostDetailView.as_view(), name='post_detail'),
     path('post/create/', PostCreateView.as_view(), name='post_create'),
