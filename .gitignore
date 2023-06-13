@@ -1,3 +1,16 @@
 /.idea
 /.vscode
 /venv
+project/catalog/__pycache__/forms.cpython-310.pyc
+project/catalog/__pycache__/forms.cpython-310.pyc
+project/catalog/__pycache__/models.cpython-310.pyc
+project/catalog/migrations/0005_alter_product_options_alter_product_table.py
+project/catalog/migrations/0006_alter_product_id.py
+project/catalog/migrations/0007_alter_product_image.py
+project/catalog/migrations/__pycache__/0005_alter_product_options_alter_product_table.cpython-310.pyc
+project/catalog/migrations/__pycache__/0006_alter_product_id.cpython-310.pyc
+project/catalog/migrations/__pycache__/0007_alter_product_image.cpython-310.pyc
+project/media/dddd.jpg
+project/catalog/__pycache__/models.cpython-310.pyc
+project/catalog/__pycache__/forms.cpython-310.pyc
+project/catalog/__pycache__/models.cpython-310.pyc
