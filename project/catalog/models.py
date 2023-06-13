@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
@@ -12,20 +13,39 @@ class Category(models.Model):
         return self.name
     
 class Product( models.Model):
+    id = models.AutoField(primary_key=True) # это поле будет автоматически увеличиваться при каждой новой записи
     category = models.ForeignKey(Category, on_delete= models.CASCADE, related_name='products')
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='products/%', blank=True)
+    image = models.ImageField(upload_to=lambda instance, filename: instance.generate_filename(filename), blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    @property
+    def image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+        else:
+            return None
+        
+    def generate_filename(self, filename):
+        ext = os.path.splitext(filename)[1]
+        return f"{self.name}{ext}"
+        
     # метод для получения активной версии продукта, если она есть
     def get_active_version(self):
         # фильтруем версии по признаку текущей и берем первую из них
         active_version = self.version_set.filter(is_active=True).first()
         # возвращаем активную версию или None, если ее нет
         return active_version
+    
+    class Meta:
+        db_table = 'catalog_product'
+        ordering = ['name']
+    
+    def __str__(self):
+        return self.name
     
 class Version(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='version_set')
@@ -45,13 +65,6 @@ class Version(models.Model):
             other_active_versions.update(is_active=False)
         # вызываем метод родительского класса для сохранения версии в базу данных
         super().save(*args, **kwargs)
-
-class Meta:
-    db_table = 'catalog_product'
-    ordering = ['name']
-    
-    def __str__(self):
-        return self.name
     
 # Создаем модель блоговой записи
 class Post(models.Model):

@@ -19,6 +19,7 @@ class ProductForm(forms.ModelForm):
     # добавляем валидаторы для полей name и description
     name = forms.CharField(validators=[check_banned_words])
     description = forms.CharField(widget=forms.Textarea, validators=[check_banned_words])
+    image = forms.ImageField(required=False)
     class Meta:
         model = Product
         fields = ['name', 'description', 'price', 'image', 'category']

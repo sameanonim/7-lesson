@@ -12,7 +12,11 @@
     <div class="col-md-4">
       <!-- Отображаем карточку товара с изображением, названием, ценой и обрезанным описанием -->
       <div class="card mb-4">
-        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        {% if product.image %}
+        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ 'image' }}">
+        {% else%}
+        <p>Изображение недоступно</p>
+        {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">{{ product.price }} руб.</p>
