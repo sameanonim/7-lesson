@@ -21,7 +21,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='products/', blank=False)
+    image = models.ImageField(upload_to='', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -38,14 +38,15 @@ class Product(models.Model):
         else:
             return None
         
+    def get_absolute_url(self):
+        # Получаем URL-адрес для детального представления продукта
+        return reverse('product_detail', args=[str(self.id)])
+        
     @classmethod
     def get_active_version(cls, product_id):
         product = cls.objects.get(id=product_id)
         active_version = product.version_set.filter(is_active=True).first()
         return active_version
-    
-    def get_absolute_url(self):
-        return reverse('product_detail', kwargs={'category_slug': self.category.slug, 'product_slug': self.slug})
     
     class Meta:
         db_table = 'catalog_product'

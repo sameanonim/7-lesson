@@ -7,30 +7,6 @@
   <p>This is a simple Django app that allows you to browse and buy products.</p>
 </div>
 {% endblock %}
-
-{ % extends 'base.html' %}
-{% load static %}
-{ % block title %}
-Главная страница
-{ % endblock %}
-{ % block extra_head %}
-<!-- Подключение файла CSS с именем style.css из папки static -->
-<link rel="stylesheet" href="{% static 'style.css' %}">
-{ % endblock %}
-{ % block content %}
-<h1>Список товаров</h1>
-<ul>
-  { % for product in products %}
-  <li>
-    <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
-    <p>Название: {{product.name}}</p>
-    <p>Цена: {{product.price}} руб.</p>
-    <p>Описание: {{product.description}}</p>
-  </li>
-  { % endfor %}
-</ul>
-{ % endblock %}
-
 {% load static %}
 {% block content %}
 <div class="container">
@@ -40,7 +16,7 @@
     <div class="col-md-4">
       <!-- Отображаем карточку товара с изображением, названием, ценой и обрезанным описанием -->
       <div class="card mb-4">
-        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">{{ product.price }} руб.</p>

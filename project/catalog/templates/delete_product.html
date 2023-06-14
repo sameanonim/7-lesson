@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block content %}
 <h1>Удалить продукт</h1>
-<h3>Вы уверены, что хотите удалить продукт {{ product.name }}?</h3>
-<form method="POST">
-  <!-- добавляем токен для защиты от CSRF-атак -->
-  {% csrf_token %}
-  <!-- добавляем кнопку для подтверждения удаления -->
-  <input type="submit" value="Да, удалить">
-</form>
-{% endblock %}
+<p>Вы уверены, что хотите удалить продукт "{{ product.name }}"?</p>
+  <div class="form-group">
+    <form method="POST"> {% csrf_token %} <button type="submit" class="btn btn-danger">Да, удалить</button> </form> <a href="{{ product.get_absolute_url }}" class="btn btn-secondary">Нет, вернуться к продукту</a>
+</div> {% endblock %}

@@ -1,10 +1,10 @@
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django import forms
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
 from .models import Product, Post, Version
-from .forms import ProductForm, VersionCreateForm, VersionForm, VersionFormSet
-
-# Create your views here.
+from .forms import ProductForm, VersionCreateForm, VersionForHelper, VersionForm, VersionFormSet
+from django.contrib import messages
 
 class HomeView(ListView):
     # Указываем модель, из которой берутся данные
@@ -46,6 +46,8 @@ class ProductCreateView(CreateView):
             context['version_form'] = VersionForm(self.request.POST)
         else:
             context['version_form'] = VersionForm()
+        context['version_formset_helper'] = VersionForHelper()
+        context['version_formset'] = VersionFormSet(self.request.POST or None, prefix='version')
         return context
 
 
@@ -55,6 +57,7 @@ class ProductCreateView(CreateView):
         if version_form.is_valid():
             self.object = form.save()
             version = version_form.save(commit=False)
+            version.product = self.object
             version.save()
             return super().form_valid(form)
         else:
@@ -98,12 +101,11 @@ class ProductUpdateView(UpdateView):
 class ProductDeleteView(DeleteView):
     # Указываем модель, для которой создается форма
     model = Product
-    # Указываем форму, которая используется для создания объекта
-    form_class = ProductForm
     # указываем шаблон
     template_name = 'delete_product.html'
     #у указываем адрес перенаправления
-    success_url = '/'
+    success_url = reverse_lazy('home')
+    pk_url_kwarg = 'id'
 
 class VersionCreateView(CreateView):
     model = Version
@@ -120,7 +122,7 @@ class VersionUpdateView(UpdateView):
 class VersionDeleteView(DeleteView):
     model = Version
     template_name = 'version_confirm_delete.html'
-    success_url = '/catalog/'
+    success_url = '/'
 
 # Контроллер для отображения списка статей
 class PostListView(ListView):

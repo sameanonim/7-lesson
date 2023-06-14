@@ -3,11 +3,12 @@
 {% load static %}
 {% block content %}
 <h1>Создать новый продукт</h1>
-<form method="POST">
+<form method="post" enctype="multipart/form-data">
   <!-- добавляем токен для защиты от CSRF-атак -->
   {% csrf_token %}
   {{ form|crispy }}
-  {{ version_form.as_p }}
+  {{ version_formset|crispy }}
+  {{ form.media }}
   <!-- добавляем кнопку для отправки формы -->
   <input type="submit" value="Сохранить">
 </form>
