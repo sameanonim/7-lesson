@@ -12,15 +12,24 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-class Product( models.Model):
+    def get_absolute_url(self):
+        return reverse('category_detail', args=[self.id])
+    
+class Product(models.Model):
     id = models.AutoField(primary_key=True) # это поле будет автоматически увеличиваться при каждой новой записи
-    category = models.ForeignKey(Category, on_delete= models.CASCADE, related_name='products')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to=lambda instance, filename: instance.generate_filename(filename), blank=True)
+    image = models.ImageField(upload_to='products/', blank=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            ext = os.path.splitext(self.image.name)[1]
+            self.image.name = f"{self.name}{ext}"
+        super().save(*args, **kwargs)
 
     @property
     def image_url(self):
@@ -29,16 +38,14 @@ class Product( models.Model):
         else:
             return None
         
-    def generate_filename(self, filename):
-        ext = os.path.splitext(filename)[1]
-        return f"{self.name}{ext}"
-        
-    # метод для получения активной версии продукта, если она есть
-    def get_active_version(self):
-        # фильтруем версии по признаку текущей и берем первую из них
-        active_version = self.version_set.filter(is_active=True).first()
-        # возвращаем активную версию или None, если ее нет
+    @classmethod
+    def get_active_version(cls, product_id):
+        product = cls.objects.get(id=product_id)
+        active_version = product.version_set.filter(is_active=True).first()
         return active_version
+    
+    def get_absolute_url(self):
+        return reverse('product_detail', kwargs={'category_slug': self.category.slug, 'product_slug': self.slug})
     
     class Meta:
         db_table = 'catalog_product'
@@ -48,21 +55,21 @@ class Product( models.Model):
         return self.name
     
 class Version(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='version_set')
-    number = models.CharField(max_length=10)
-    name = models.CharField(max_length=50)
-    is_active = models.BooleanField(default=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='versions')
+    number_version = models.IntegerField()
+    name_version = models.CharField(max_length=100)
+    is_current = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.product} - {self.number} - {self.name}"
+        return f'{self.product.name} - {self.name_version}'
 
     # метод для сохранения версии в базу данных с проверкой на уникальность активной версии
     def save(self, *args, **kwargs):
         # если эта версия активна
-        if self.is_active:
+        if self.is_current:
             # то находим все другие активные версии для этого продукта и делаем их неактивными
-            other_active_versions = Version.objects.filter(product=self.product, is_active=True).exclude(pk=self.pk)
-            other_active_versions.update(is_active=False)
+            other_active_versions = Version.objects.filter(product=self.product, is_current=True).exclude(pk=self.pk)
+            other_active_versions.update(is_current=False)
         # вызываем метод родительского класса для сохранения версии в базу данных
         super().save(*args, **kwargs)
     

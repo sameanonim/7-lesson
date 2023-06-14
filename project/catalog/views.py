@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy
 from django import forms
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
-from .models import Product, Post
-from .forms import ProductForm, VersionFormSet
+from .models import Product, Post, Version
+from .forms import ProductForm, VersionCreateForm, VersionForm, VersionFormSet
 
 # Create your views here.
 
@@ -39,6 +39,26 @@ class ProductCreateView(CreateView):
     template_name = 'create_product.html'
     #у указываем адрес перенаправления
     success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['version_form'] = VersionForm(self.request.POST)
+        else:
+            context['version_form'] = VersionForm()
+        return context
+
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        version_form = context['version_form']
+        if version_form.is_valid():
+            self.object = form.save()
+            version = version_form.save(commit=False)
+            version.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
 class ProductUpdateView(UpdateView):
     # Указываем модель, для которой создается форма
@@ -84,6 +104,23 @@ class ProductDeleteView(DeleteView):
     template_name = 'delete_product.html'
     #у указываем адрес перенаправления
     success_url = '/'
+
+class VersionCreateView(CreateView):
+    model = Version
+    form_class = VersionCreateForm
+    template_name = 'version_form.html'
+    success_url = '/'
+
+class VersionUpdateView(UpdateView):
+    model = Version
+    form_class = VersionCreateForm
+    template_name = 'version_form.html'
+    success_url = '/'
+
+class VersionDeleteView(DeleteView):
+    model = Version
+    template_name = 'version_confirm_delete.html'
+    success_url = '/catalog/'
 
 # Контроллер для отображения списка статей
 class PostListView(ListView):

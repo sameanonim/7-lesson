@@ -1,20 +1,12 @@
+<!-- update_product.html -->
 {% extends 'base.html' %}
-{% load static %}
+
 {% block content %}
-<div class="container">
-  <h1>Редактировать продукт {{ product.name }}</h1>
-  <!-- выводим форму с полями для ввода данных о продукте -->
-  <form method="POST">
-    <!-- добавляем токен для защиты от CSRF-атак -->
+<h1>Редактирование продукта</h1>
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    {% load crispy_forms_tags %}
-    <!-- выводим форму продукта с помощью crispy-forms -->
-    {{ form|crispy }}
-    <!-- выводим формсет версий продукта с помощью crispy-forms -->
-    {{ version_formset|crispy }}
-    <!-- добавляем кнопку для отправки форм -->
+    {{ version_formset.as_p }}
     <input type="submit" value="Сохранить">
-  </form>
-</div>
+</form>
 {% endblock %}

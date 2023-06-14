@@ -6,6 +6,7 @@
   <!-- добавляем токен для защиты от CSRF-атак -->
   {% csrf_token %}
   {{ form.as_p }}
+  {{ version_form.as_p }}
   <!-- добавляем кнопку для отправки формы -->
   <input type="submit" value="Сохранить">
 </form>

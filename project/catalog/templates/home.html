@@ -13,7 +13,7 @@
       <!-- Отображаем карточку товара с изображением, названием, ценой и обрезанным описанием -->
       <div class="card mb-4">
         {% if product.image %}
-        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ 'image' }}">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ 'image' }}">
         {% else%}
         <p>Изображение недоступно</p>
         {% endif %}
@@ -23,6 +23,11 @@
           <!-- Обрезаем описание после 100 символов и добавляем многоточие -->
           <p class="card-text">{{ product.description|truncatechars:100 }}</p>
           <!-- Добавляем ссылку для перехода на страницу с карточкой товара -->
+              {% for version in versions %}
+              {% if version.product == product and version.is_current %}
+                  <p>Текущая версия: {{ version.number }} - {{ version.name }}</p>
+              {% endif %}
+          {% endfor %}
           <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
         </div>
       </div>

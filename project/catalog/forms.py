@@ -2,6 +2,8 @@ from django import forms
 from django.forms import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from .models import Product, Version
 
 BANNED_WORDS = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
@@ -49,7 +51,7 @@ class ProductForm(forms.ModelForm):
 class VersionForm(forms.ModelForm):
     class Meta:
         model = Version
-        fields = ['number', 'name', 'is_active']
+        fields = ['number_version', 'name_version', 'is_current']
 
     # метод для стилизации формы с помощью crispy-forms
     def __init__(self, *args, **kwargs):
@@ -59,11 +61,16 @@ class VersionForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('number', css_class='form-group col-md-4 mb-0'),
-                Column('name', css_class='form-group col-md-4 mb-0'),
-                Column('is_active', css_class='form-group col-md-4 mb-0'),
+                Column('name_version', css_class='form-group col-md-4 mb-0'),
+                Column('is_current', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
         )
+
+class VersionCreateForm(forms.ModelForm):
+    class Meta:
+        model = Version
+        fields = ['number_version', 'name_version', 'is_current']
 
 # создаем формсет для версий продукта, связанный с продуктом
 VersionFormSet = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
