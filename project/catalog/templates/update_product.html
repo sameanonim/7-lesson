@@ -1,11 +1,11 @@
 <!-- update_product.html -->
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <h1>Редактирование продукта</h1>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form|crispy }}
     {{ version_formset.as_p }}
     <input type="submit" value="Сохранить">
 </form>
