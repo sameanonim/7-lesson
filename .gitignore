@@ -68,3 +68,4 @@ project/project/__pycache__/__init__.cpython-310.pyc
 project/project/__pycache__/settings.cpython-310.pyc
 project/project/__pycache__/urls.cpython-310.pyc
 project/project/__pycache__/wsgi.cpython-310.pyc
+project/catalog/__pycache__/forms.cpython-310.pyc

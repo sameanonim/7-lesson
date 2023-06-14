@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
 <h1>Создать новый продукт</h1>
 <form method="POST">
   <!-- добавляем токен для защиты от CSRF-атак -->
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ form|crispy }}
   {{ version_form.as_p }}
   <!-- добавляем кнопку для отправки формы -->
   <input type="submit" value="Сохранить">
