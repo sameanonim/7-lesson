@@ -23,12 +23,8 @@
           <p class="card-text">{{ product.price }} руб.</p>
           <!-- Обрезаем описание после 100 символов и добавляем многоточие -->
           <p class="card-text">{{ product.description|truncatechars:100 }}</p>
-          <!-- Добавляем ссылку для перехода на страницу с карточкой товара -->
-              {% for version in versions %}
-              {% if version.id == product.id and version.is_current %}
-                  <p>Текущая версия: {{ version.number_version }} - {{ version.name_version }}</p>
-              {% endif %}
-          {% endfor %}
+          {% with active_version=product.versions.get is_current=True %} {% if active_version %}
+          <p>Активная версия: {{ active_version.number_version }} - {{ active_version.name_version }}</p> {% endif %} {% endwith %}
           <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
         </div>
       </div>
