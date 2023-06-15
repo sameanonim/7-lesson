@@ -20,9 +20,10 @@ def check_banned_words(value):
 
 class ProductForm(forms.ModelForm):
     # добавляем валидаторы для полей name и description с кастомными сообщениями об ошибках
-    name = forms.CharField(validators=[check_banned_words], error_messages={'invalid': check_banned_words})
-    description = forms.CharField(widget=forms.Textarea, validators=[check_banned_words], error_messages={'invalid': check_banned_words})
-    image = forms.ImageField(required=False)
+    name = forms.CharField(validators=[check_banned_words], error_messages={'invalid': check_banned_words}, label=("Название продукта"))
+    description = forms.CharField(widget=forms.Textarea, validators=[check_banned_words], error_messages={'invalid': check_banned_words}, label=("Описание продукта"))
+    price = forms.DecimalField(max_digits=10, decimal_places=2, label=("Цена"))
+    image = forms.ImageField(required=False, label=("Картинка"))
     class Meta:
         model = Product
         fields = ['name', 'description', 'price', 'image', 'category']
@@ -57,6 +58,9 @@ class ProductDeleteForm(forms.ModelForm):
         fields = ['name', 'description', 'price', 'image', 'category']
 
 class VersionForm(forms.ModelForm):
+    number_version = forms.IntegerField(required=False, label=("Номер версии"))
+    name_version = forms.CharField(required=False, max_length=100, label=("Имя версии"))
+    is_current = forms.BooleanField(required=False, initial=False)
     class Meta:
         model = Version
         fields = ['number_version', 'name_version', 'is_current']
