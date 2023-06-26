@@ -17,7 +17,7 @@ class Category(models.Model):
     
 class Product(models.Model):
     id = models.AutoField(primary_key=True) # это поле будет автоматически увеличиваться при каждой новой записи
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', db_column='category_id')
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)

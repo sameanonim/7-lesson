@@ -88,3 +88,26 @@ project/media/333.jpg
 project/media/ууу.jpg
 project/media/222_KrTmbAz.jpg
 project/catalog/__pycache__/forms.cpython-310.pyc
+project/Текстовый документ.txt
+project/catalog/__pycache__/__init__.cpython-310.pyc
+project/catalog/__pycache__/admin.cpython-310.pyc
+project/catalog/__pycache__/apps.cpython-310.pyc
+project/catalog/__pycache__/forms.cpython-310.pyc
+project/catalog/__pycache__/models.cpython-310.pyc
+project/catalog/__pycache__/urls.cpython-310.pyc
+project/catalog/__pycache__/views.cpython-310.pyc
+project/catalog/management/__pycache__/__init__.cpython-310.pyc
+project/catalog/management/commands/__pycache__/__init__.cpython-310.pyc
+project/catalog/management/commands/__pycache__/fill.cpython-310.pyc
+project/catalog/migrations/__pycache__/__init__.cpython-310.pyc
+project/catalog/migrations/__pycache__/0001_initial.cpython-310.pyc
+project/catalog/migrations/__pycache__/0002_alter_product_category.cpython-310.pyc
+project/catalog/migrations/__pycache__/0002_rename_is_active_version_is_current_and_more.cpython-310.pyc
+project/catalog/templatetags/__pycache__/init.cpython-310.pyc
+project/catalog/templatetags/__pycache__/mediapath.cpython-310.pyc
+project/media/apple.jpg
+project/media/asus.jpg
+project/project/__pycache__/__init__.cpython-310.pyc
+project/project/__pycache__/settings.cpython-310.pyc
+project/project/__pycache__/urls.cpython-310.pyc
+project/project/__pycache__/wsgi.cpython-310.pyc
