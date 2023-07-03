@@ -1,5 +1,6 @@
 import os
 from django.db import models
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.text import slugify
 
@@ -56,24 +57,18 @@ class Product(models.Model):
         return self.name
     
 class Version(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='versions')
-    number_version = models.IntegerField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='версии')
+    number_version = models.IntegerField(null = True)
     name_version = models.CharField(max_length=100)
     is_current = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.product.name} - {self.name_version}'
+        return f'{self.name_version} - {self.number_version}'
 
     # метод для сохранения версии в базу данных с проверкой на уникальность активной версии
     def save(self, *args, **kwargs):
-        # если эта версия активна
-        if self.is_current:
-            # то находим все другие активные версии для этого продукта и делаем их неактивными
-            other_active_versions = Version.objects.filter(product=self.product, is_current=True).exclude(pk=self.pk)
-            other_active_versions.update(is_current=False)
-        # вызываем метод родительского класса для сохранения версии в базу данных
         super().save(*args, **kwargs)
-    
+
 # Создаем модель блоговой записи
 class Post(models.Model):
     # Заголовок статьи

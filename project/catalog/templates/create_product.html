@@ -2,14 +2,18 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-<h1>Создать новый продукт</h1>
-<form method="post" enctype="multipart/form-data">
-  <!-- добавляем токен для защиты от CSRF-атак -->
-  {% csrf_token %}
-  {{ form|crispy }}
-  {{ version_formset|crispy }}
-  {{ form.media }}
-  <!-- добавляем кнопку для отправки формы -->
-  <input type="submit" value="Сохранить">
-</form>
+    <div class="col">
+        <form class="row" method="post">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" class="btn btn-success"
+                               value="{% if object %}Сохранить{% else %}Создать{% endif %}">
+
+                    </div>
+                </div>
+            </div>
 {% endblock %}

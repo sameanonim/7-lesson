@@ -12,10 +12,11 @@
       <h1>{{ product.name }}</h1>
       <p class="text-muted">{{ product.price }} руб.</p>
       <p>{{ product.description }}</p>
-      <!-- если у продукта есть активная версия, то выводим ее информацию -->
-      {% with active_version=product.versions.get is_current=True %} {% if active_version %}
-      <p>Активная версия: {{ active_version.number_version }} - {{ active_version.name_version }}</p> {% endif %} {% endwith %} 
-      <!-- Добавляем кнопку для добавления товара в корзину -->
+      {% if version %}
+        <p>Версия продукта: {{ version.number_version }} название версии {{ version.name_version }}</p>
+      {% else %}
+        <p>Версия продукта не отслеживается.</p>
+      {% endif %}
       <div class="btn-group-vertical">
         <a href="#" class="btn btn-primary">Добавить в корзину</a>
         <a href="{% url 'update_product' product.id %}" class="btn btn-secondary">Редактировать продукт</a>

@@ -2,11 +2,38 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<h1>Редактирование продукта</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form|crispy }}
-    {{ version_formset|crispy }}
-    <input type="submit" value="Сохранить">
-</form>
+    <div class="col">
+        <form class="row" method="post">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" class="btn btn-success"
+                               value="{% if object %}Сохранить{% else %}Создать{% endif %}">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        Версия
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            {{ formset.management_form }}
+                            {% for form in formset.forms %}
+                                <tr class="subject-form">
+                                    <td>{{ form.as_p }} </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

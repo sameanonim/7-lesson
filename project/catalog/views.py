@@ -1,9 +1,10 @@
+from django.forms import inlineformset_factory
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, DetailView, UpdateView, DeleteView
 from .models import Product, Post, Version
-from .forms import ProductForm, VersionCreateForm, VersionForHelper, VersionForm, VersionFormSet
+from .forms import ProductForm, VersionForm
 from django.contrib import messages
 
 class HomeView(ListView):
@@ -29,74 +30,46 @@ class ProductDetailView(DetailView):
     # Указываем параметр, по которому ищется объект в базе данных
     pk_url_kwarg = 'product_id'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        version = product.версии.filter(is_current=True).first()
+        context['version'] = version
+        return context
 
 class ProductCreateView(CreateView):
-    # Указываем модель, для которой создается форма
     model = Product
-    # Указываем форму, которая используется для создания объекта
-    form_class = ProductForm
-    # указываем шаблон
+    fields = ('name', 'description', 'image', 'category', 'price')
     template_name = 'create_product.html'
-    #у указываем адрес перенаправления
-    success_url = '/'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['version_form'] = VersionForm(self.request.POST)
-        else:
-            context['version_form'] = VersionForm()
-        context['version_formset_helper'] = VersionForHelper()
-        context['version_formset'] = VersionFormSet(self.request.POST or None, prefix='version')
-        return context
-
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        version_form = context['version_form']
-        if version_form.is_valid():
-            self.object = form.save()
-            version = version_form.save(commit=False)
-            version.product = self.object
-            version.save()
-            return super().form_valid(form)
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
+    success_url = reverse_lazy('home')
 
 class ProductUpdateView(UpdateView):
-    # Указываем модель, для которой создается форма
     model = Product
-    # Указываем форму, которая используется для создания объекта
     form_class = ProductForm
-    # указываем шаблон
     template_name = 'update_product.html'
-    #у указываем адрес перенаправления
-    success_url = '/'
+    success_url = reverse_lazy('home')
 
-        # метод для добавления дополнительного контекста в шаблон
+    def get_success_url(self, *args, **kwargs):
+        return reverse('update_product', args=[self.get_object().pk])
+    
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # если запрос типа POST, то создаем формсет из полученных данных и файлов
-        if self.request.POST:
-            context['version_formset'] = VersionFormSet(self.request.POST, self.request.FILES, instance=self.object)
-        # иначе создаем пустой формсет
+        context_data = super().get_context_data(**kwargs)
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        if self.request.method == 'POST':
+            context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
         else:
-            context['version_formset'] = VersionFormSet(instance=self.object)
-        return context
+            context_data['formset'] = VersionFormset(instance=self.object)
+        return context_data
 
-    # метод для сохранения формы и формсета в базу данных
     def form_valid(self, form):
-        context = self.get_context_data()
-        version_formset = context['version_formset']
-        # если формсет валиден, то сохраняем его вместе с формой
-        if version_formset.is_valid():
-            self.object = form.save()
-            version_formset.instance = self.object
-            version_formset.save()
-            return super().form_valid(form)
-        # иначе возвращаем ошибку валидации
-        else:
-            return self.form_invalid(form)
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+
+        return super().form_valid(form)
 
 class ProductDeleteView(DeleteView):
     # Указываем модель, для которой создается форма
@@ -105,18 +78,17 @@ class ProductDeleteView(DeleteView):
     template_name = 'delete_product.html'
     #у указываем адрес перенаправления
     success_url = reverse_lazy('home')
-    pk_url_kwarg = 'id'
 
 class VersionCreateView(CreateView):
     model = Version
-    form_class = VersionCreateForm
+    form_class = VersionForm
     template_name = 'version_form.html'
     success_url = '/'
 
 class VersionUpdateView(UpdateView):
     model = Version
-    form_class = VersionCreateForm
-    template_name = 'version_form.html'
+    form_class = VersionForm
+    template_name = 'update_version.html'
     success_url = '/'
 
 class VersionDeleteView(DeleteView):

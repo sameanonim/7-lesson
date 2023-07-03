@@ -1,96 +1,39 @@
 from django import forms
 from django.forms import inlineformset_factory
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Field, Div
-from django.forms.widgets import ClearableFileInput
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
 from .models import Product, Version
 
-BANNED_WORDS = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
+class FormStyleMixin:
 
-def check_banned_words(value):
-    # приводим строку к нижнему регистру и разбиваем на слова
-    words = value.lower().split()
-    # перебираем слова и проверяем, есть ли они в списке запрещенных
-    for word in words:
-        if word in BANNED_WORDS:
-            # если есть, возвращаем сообщение об ошибке
-            return f"Слово '{word}' запрещено для использования."
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-class ProductForm(forms.ModelForm):
-    # добавляем валидаторы для полей name и description с кастомными сообщениями об ошибках
-    name = forms.CharField(validators=[check_banned_words], error_messages={'invalid': check_banned_words}, label=("Название продукта"))
-    description = forms.CharField(widget=forms.Textarea, validators=[check_banned_words], error_messages={'invalid': check_banned_words}, label=("Описание продукта"))
-    price = forms.DecimalField(max_digits=10, decimal_places=2, label=("Цена"))
-    image = forms.ImageField(required=False, label=("Картинка"))
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class ProductForm(FormStyleMixin, forms.ModelForm):
+    forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
+
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'image', 'category']
+        fields = ('name', 'description', 'image', 'category', 'price',)
 
-    # метод для стилизации формы с помощью crispy-forms
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.prefix = 'product'
-        self.helper.form_tag = False
-        self.helper.layout = Layout(
-            Row(
-                Column('category', css_class='form-group col-md-6 mb-0'),
-                Column('name', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('description', css_class='form-group col-md-12 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('price', css_class='form-group col-md-6 mb-0'),
-                Column('image', widget=ClearableFileInput, css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-        )
+    def clean_name(self):
+        cleaned_name = self.cleaned_data['name']
+        for word in self.forbidden_words:
+            if word in cleaned_name.lower():
+                raise forms.ValidationError(f'Название не может содержать слово "{word}"')
+        return cleaned_name
 
-class ProductDeleteForm(forms.ModelForm):
-    # определяем поля и метаданные для формы удаления продукта
-    class Meta:
-        model = Product
-        fields = ['name', 'description', 'price', 'image', 'category']
+    def clean_description(self):
+        cleaned_description = self.cleaned_data['description']
+        for word in self.forbidden_words:
+            if word in cleaned_description.lower():
+                raise forms.ValidationError(f'Описание не может содержать слово "{word}"')
+        return cleaned_description
 
-class VersionForm(forms.ModelForm):
-    number_version = forms.IntegerField(required=False, label=("Номер версии"))
-    name_version = forms.CharField(required=False, max_length=100, label=("Имя версии"))
-    is_current = forms.BooleanField(required=False, initial=False)
+
+class VersionForm(FormStyleMixin, forms.ModelForm):
     class Meta:
         model = Version
-        fields = ['number_version', 'name_version', 'is_current']
-
-    # метод для стилизации формы с помощью crispy-forms
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.prefix = 'version'
-        self.helper.form_tag = False
-        self.helper.layout = Layout(
-            Row(
-                Column('number_version', css_class='form-group col-md-4 mb-0'),
-                Column('name_version', css_class='form-group col-md-4 mb-0'),
-                Column('is_current', css_class='form-group col-md-4 mb-0'),
-                css_class='form-row'
-            ),
-        )
-
-class VersionForHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.template = 'bootstrap4/table_inline_formset.html'
-        self.form_tag = False
-        self.form_show_labels = False
-
-class VersionCreateForm(forms.ModelForm):
-    class Meta:
-        model = Version
-        fields = ['number_version', 'name_version', 'is_current']
-
-# создаем формсет для версий продукта, связанный с продуктом
-VersionFormSet = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        fields = '__all__'
