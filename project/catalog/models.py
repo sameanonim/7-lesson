@@ -27,10 +27,11 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         if self.image:
             ext = os.path.splitext(self.image.name)[1]
             self.image.name = f"{self.name}{ext}"
-        super().save(*args, **kwargs)
+            super().save(update_fields=['image'])
 
     @property
     def image_url(self):
