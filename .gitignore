@@ -20,7 +20,6 @@ project/project/__pycache__/urls.cpython-310.pyc
 project/project/__pycache__/wsgi.cpython-310.pyc
 project/project/__pycache__/__init__.cpython-310.pyc
 project/catalog/migrations/0002_alter_product_image.py
-project/catalog/migrations/0001_initial.py
 project/catalog/__pycache__/__init__.cpython-310.pyc
 project/catalog/__pycache__/admin.cpython-310.pyc
 project/catalog/__pycache__/apps.cpython-310.pyc
@@ -29,7 +28,6 @@ project/catalog/__pycache__/models.cpython-310.pyc
 project/catalog/__pycache__/urls.cpython-310.pyc
 project/catalog/__pycache__/views.cpython-310.pyc
 project/catalog/management/__pycache__/__init__.cpython-310.pyc
-project/catalog/migrations/0001_initial.py
 project/catalog/migrations/__pycache__/0001_initial.cpython-310.pyc
 project/catalog/migrations/__pycache__/__init__.cpython-310.pyc
 project/catalog/migrations/__pycache__/0002_alter_product_image.cpython-310.pyc
@@ -56,7 +54,6 @@ project/catalog/__pycache__/models.cpython-310.pyc
 project/catalog/__pycache__/urls.cpython-310.pyc
 project/catalog/__pycache__/views.cpython-310.pyc
 project/catalog/management/__pycache__/__init__.cpython-310.pyc
-project/catalog/migrations/0001_initial.py
 project/catalog/migrations/__pycache__/__init__.cpython-310.pyc
 project/catalog/migrations/__pycache__/0001_initial.cpython-310.pyc
 project/catalog/migrations/__pycache__/0002_post_alter_category_options_alter_product_options.cpython-310.pyc
@@ -111,3 +108,6 @@ project/project/__pycache__/__init__.cpython-310.pyc
 project/project/__pycache__/settings.cpython-310.pyc
 project/project/__pycache__/urls.cpython-310.pyc
 project/project/__pycache__/wsgi.cpython-310.pyc
+project/catalog/migrations/__pycache__/0001_initial.cpython-310.pyc
+project/catalog/migrations/__pycache__/__init__.cpython-310.pyc
+project/catalog/migrations/__init__.py

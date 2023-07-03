@@ -1,28 +1,24 @@
-{% extends 'base.html' %} <!-- наследуемся от базового шаблона -->
+{% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}Каталог - Домашняя страница{% endblock %} <!-- переопределяем блок для заголовка страницы -->
-{% block content %} <!-- переопределяем блок для основного содержимого страницы -->
+{% block title %}Каталог - Домашняя страница{% endblock %}
+{% block content %}
 <div class="container">
   <h1>Добро пожаловать в Каталог</h1>
-<a href="{% url 'create_product' %}" class="btn btn-primary">Создать новый продукт</a>
-<div class="container">
+  <a href="{% url 'create_product' %}" class="btn btn-primary">Создать новый продукт</a>
   <div class="row">
-    <!-- Проходимся по списку товаров в цикле -->
     {% for product in products %}
     <div class="col-md-4">
-      <!-- Отображаем карточку товара с изображением, названием, ценой и обрезанным описанием -->
       <div class="card mb-4">
         {% if product.image %}
-        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ 'image' }}">
-        {% else%}
+        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+        {% else %}
         <p>Изображение недоступно</p>
         {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">{{ product.price }} руб.</p>
-          <!-- Обрезаем описание после 100 символов и добавляем многоточие -->
-          <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+          <p class="card-text">{{ product.description|truncatechars:100|linebreaksbr }}</p>
           <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
         </div>
       </div>
